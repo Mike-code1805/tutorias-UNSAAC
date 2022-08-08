@@ -63,7 +63,22 @@ class Group73
 
     public function transformarArrayDeDistribuciónTutorTutoradoADiccionario($array, $docente)
     {
-        print_r($docente);
+        $j = 0;
+        for ($i = 0; $i < count($docente); $i++) {
+            if ($docente[$i][1] == "PR-DE") {
+                $array_docente[$j][0] = $docente[$i][0];
+                $array_docente[$j][1] = $docente[$i][1];
+                $j++;
+            }
+        }
+        for ($i = 0; $i < count($docente); $i++) {
+            if ($docente[$i][1] != "PR-DE") {
+                $array_docente[$j][0] = $docente[$i][0];
+                $array_docente[$j][1] = $docente[$i][1];
+                $j++;
+            }
+        }
+        $docente_array = array_reverse($array_docente);
         foreach ($array as $valor) {
             $val = substr($valor[0], 0, 7);
             if ($val == 'Docente') {
@@ -74,6 +89,7 @@ class Group73
                 $i += 1;
             }
         }
+
         return $Arreglo;
     }
 
@@ -163,15 +179,4 @@ class Group73
         $distribucionBalanceada = array_merge($arreglo2, $arreglo1);
         return $distribucionBalanceada;
     }
-
-    public function diferencia1($ArrA, $ArrB)
-    {
-        $fila = 0;
-        $Arreglo = array();
-        for ($x = 0; $x < count($ArrB); $x++) {
-            echo $ArrB[$x][0];            
-        }
-        return $Arreglo;
-    }
-
 }
