@@ -27,7 +27,6 @@ class Group73
             }
             fclose($gestor);
         }
-
         return $Arreglo;
     }
     public function Imprimir($Array)
@@ -61,25 +60,33 @@ class Group73
         return $Arreglo;
     }
 
-    public function transformarArrayDeDistribuciónTutorTutoradoADiccionario($array, $docente)
+    public function ordenarListaDocentes($ListaDocente)
     {
+        $array_docente = array();
+        $docente_array = array();
         $j = 0;
-        for ($i = 0; $i < count($docente); $i++) {
-            if ($docente[$i][1] == "PR-DE") {
-                $array_docente[$j][0] = $docente[$i][0];
-                $array_docente[$j][1] = $docente[$i][1];
+        for ($i = 0; $i < count($ListaDocente); $i++) {
+            if ($ListaDocente[$i][1] == "PR-DE") {
+                $array_docente[$j][0] = $ListaDocente[$i][0];
+                $array_docente[$j][1] = $ListaDocente[$i][1];
                 $j++;
             }
         }
-        for ($i = 0; $i < count($docente); $i++) {
-            if ($docente[$i][1] != "PR-DE") {
-                $array_docente[$j][0] = $docente[$i][0];
-                $array_docente[$j][1] = $docente[$i][1];
+        for ($i = 0; $i < count($ListaDocente); $i++) {
+            if ($ListaDocente[$i][1] != "PR-DE") {
+                $array_docente[$j][0] = $ListaDocente[$i][0];
+                $array_docente[$j][1] = $ListaDocente[$i][1];
                 $j++;
             }
         }
         $docente_array = array_reverse($array_docente);
-        foreach ($array as $valor) {
+        return $docente_array;
+    }
+
+    public function transformarDistribuciónADiccionario($Distribucion)
+    {        
+        $Arreglo = array();
+        foreach ($Distribucion as $valor) {
             $val = substr($valor[0], 0, 7);
             if ($val == 'Docente') {
                 $i = 0;
@@ -89,9 +96,120 @@ class Group73
                 $i += 1;
             }
         }
-
         return $Arreglo;
     }
+
+    public function tutoresQueSeMantienen($docente_array, $DistribucionDiccionario)
+    {
+        $tutoresQueSeMantienen = array();
+        $i = 0;
+        $k = 0;
+        foreach ($docente_array as $valor) {
+            $val_doc_distri = substr($valor[0], 0, 12);
+            foreach ($DistribucionDiccionario as $doc => $alumno) {
+                $val_doc_array = substr($doc, 0, 12);
+                if ($val_doc_distri == $val_doc_array) {
+                    $tutoresQueSeMantienen[$i][0] = $valor[0];
+                    $tutoresQueSeMantienen[$i][1] = $valor[1];
+                    $i++;
+                }
+            }
+        }
+        return $tutoresQueSeMantienen;
+    }
+    public function tutoresNuevos($docente_array, $tutoresQueSeMantienen)
+    {
+        $tutoresNuevos = array();
+        $fila = 0;
+        for ($x = 0; $x < count($docente_array); $x++) {
+            $Existe = false;
+            $val_doc_ante_distri = substr($docente_array[$x][0], 0, 12);
+            for ($y = 0; $y < count($tutoresQueSeMantienen); $y++) {
+                $val_doc_mantiene = substr($tutoresQueSeMantienen[$y][0], 0, 12);
+                if ($val_doc_ante_distri == $val_doc_mantiene) {
+                    $Existe = true;
+                    break;
+                }
+            }
+            if ($Existe == false) {
+                $tutoresNuevos[$fila][0] = $docente_array[$x][0];
+                $tutoresNuevos[$fila][1] = $docente_array[$x][1];
+                $fila++;
+            }
+        }
+        return $tutoresNuevos;
+    }
+
+    public function tutoresAnteriorDistribucion($DistribucionDiccionario)
+    {
+        $tutoresAnteriorDistribucion = array();
+        $j = 0;
+        foreach ($DistribucionDiccionario as $doc => $alumno) {
+            $tutoresAnteriorDistribucion[$j][0] = $doc;
+            $j++;
+        }
+        return $tutoresAnteriorDistribucion;
+    }
+
+    public function tutoresQueDejanElSemestre($tutoresAnteriorDistribucion, $tutoresQueSeMantienen)
+    {
+        $tutoresQueDejanElSemestre = array();
+        $fila = 0;
+        for ($x = 0; $x < count($tutoresAnteriorDistribucion); $x++) {
+            $Existe = false;
+            $val_doc_ante_distri = substr($tutoresAnteriorDistribucion[$x][0], 0, 12);
+            for ($y = 0; $y < count($tutoresQueSeMantienen); $y++) {
+                $val_doc_mantiene = substr($tutoresQueSeMantienen[$y][0], 0, 12);
+                if ($val_doc_ante_distri == $val_doc_mantiene) {
+                    $Existe = true;
+                    break;
+                }
+            }
+            if ($Existe == false) {
+                $tutoresQueDejanElSemestre[$fila][0] = $tutoresAnteriorDistribucion[$x][0];
+                $fila++;
+            }
+        }
+        print_r($tutoresQueDejanElSemestre);
+        return $tutoresQueDejanElSemestre;
+    }
+
+    public function alumnosSinTutor($tutoresQueDejanElSemestre, $DistribucionDiccionario, $alumnos, $Distribucion)
+    {
+        $alumnosSinTutor = array();
+        $fila = 0;
+        for ($x = 0; $x < count($alumnos); $x++) {
+            $Existe = false;
+            for ($y = 0; $y < count($Distribucion); $y++) {
+                if ($alumnos[$x][0] == $Distribucion[$y][0]) {
+                    $Existe = true;
+                    break;
+                }
+            }
+            if ($Existe == false) {
+                $alumnosSinTutor[$fila][0] = $alumnos[$x][0];
+                $alumnosSinTutor[$fila][1] = $alumnos[$x][1];
+                $fila++;
+            }
+        }
+        if (count($tutoresQueDejanElSemestre) > 0) {
+            foreach ($tutoresQueDejanElSemestre as $doc) {
+                foreach ($DistribucionDiccionario as $docen => $alum) {
+                    if ($doc[0] == $docen) {
+                        for ($y = 0; $y < count($DistribucionDiccionario[$docen]); $y++) {
+                            foreach ($alumnos as $alumno) {
+                                if ($alumno == $alum[$y]) {
+                                    $alumnosSinTutor[$fila] = $alum[$y];
+                                    $fila++;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return $alumnosSinTutor;
+    }    
 
     public function obtenerAlumnosCachimbos($array, $semestre)
     {
