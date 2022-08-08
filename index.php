@@ -114,7 +114,7 @@ $Mox->Imprimir($Arreglo_Dis_Docentes);
                             </thead>
                             <tbody>
                             <?php
-$AlumnosSinTutor = $Mox->diferencia($Arreglo_Matriculados, $Arreglo_Dis_Docentes);
+$AlumnosSinTutor = $Mox->diferenciaAlumnos($Arreglo_Matriculados, $Arreglo_Dis_Docentes);
 $Mox->Imprimir($AlumnosSinTutor);
 
 ?>
@@ -133,8 +133,9 @@ $Mox->Imprimir($AlumnosSinTutor);
                             <tbody>
                             <?php
 
-$AlumnosSinMatricula = $Mox->diferencia($Arreglo_Dis_Docentes, $Arreglo_Matriculados);
+$AlumnosSinMatricula = $Mox->diferenciaAlumnos($Arreglo_Dis_Docentes, $Arreglo_Matriculados);
 $Mox->Imprimir($AlumnosSinMatricula);
+// print_r($AlumnosSinMatricula);
 ?>
                             </tbody>
                         </table>
@@ -151,6 +152,16 @@ $arrayTutoresNuevos = $Mox->tutoresNuevos($arrayDocenteOrdenado, $arrayTutoresQu
 $arrayTutoresAnteriorDistribucion = $Mox->tutoresAnteriorDistribucion($arrayDistribucionDiccionario);
 $arrayTutoresQueDejanElSemestre = $Mox->tutoresQueDejanElSemestre($arrayTutoresAnteriorDistribucion, $arrayTutoresQueSeMantienen);
 $arrayAlumnosSinTutor = $Mox->alumnosSinTutor($arrayTutoresQueDejanElSemestre, $arrayDistribucionDiccionario, $Arreglo_Matriculados, $Arreglo_Dis_Docentes);
+$arrayAlumnosCachimbosSinTutor = $Mox->alumnosCachimbos($arrayAlumnosSinTutor, "22");
+$arrayAlumnosRegularesSinTutor = $Mox->diferenciaAlumnos($arrayAlumnosSinTutor, $arrayAlumnosCachimbosSinTutor);
+$arrayQuitantoAlumnosSinTutor = $Mox->diferenciaAlumnos($Arreglo_Dis_Docentes, $arrayAlumnosSinTutor);
+$arrayQuitandoAlumnosSinMatricula = $Mox->diferenciaAlumnos($arrayQuitantoAlumnosSinTutor, $AlumnosSinMatricula);
+$arrayQuitandoDocentesDejaronSemestre = $Mox->diferenciaDocente($arrayQuitandoAlumnosSinMatricula, $arrayTutoresQueDejanElSemestre);
+$arrayDistribucionAlumnosActuales = $Mox->transformarDistribuciónADiccionario($arrayQuitandoDocentesDejaronSemestre);
+$arrayAgregaTutorNuevoDiccionario = $Mox->agregarTutorAlDiccionario($arrayDistribucionAlumnosActuales, $arrayTutoresNuevos);
+$arrayDiccionarioOrdenado = $Mox->ordenarDiccionarioDistribucion($arrayAgregaTutorNuevoDiccionario, $arrayDocenteOrdenado);
+$cantidadTutorAlumnos = $Mox->cantidadAlumnosTutor($Arreglo_Matriculados, $arrayDocenteOrdenado);
+print_r($arrayDiccionarioOrdenado);
 ?>
 </body>
 </html>

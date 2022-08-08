@@ -5,7 +5,6 @@ class Group73
     {
         $tmp = $file["tmp_name"];
         $size = $file["size"];
-        echo 'console.log(' . json_encode($size) . ')';
         if ($size < 0) {
             throw new Exception("Selecciona un archivo válido por favor.");
         }
@@ -39,14 +38,36 @@ class Group73
             }
         }
     }
-    public function diferencia($ArrA, $ArrB)
+    public function diferenciaAlumnos($ArrA, $ArrB)
+    {
+        $fila = 0;
+        $Arreglo = array();
+        for ($x = 0; $x < count($ArrA); $x++) {
+            $Existe = false;
+            $val = substr($ArrA[$x][0], 0, 7);
+            for ($y = 0; $y < count($ArrB); $y++) {
+                if ($ArrA[$x][0] == $ArrB[$y][0] and $val != "Docente") {
+                    $Existe = true;
+                    break;
+                }
+            }
+            if ($Existe == false) {
+                $Arreglo[$fila][0] = $ArrA[$x][0];
+                $Arreglo[$fila][1] = $ArrA[$x][1];
+                $fila++;
+            }
+        }
+        return $Arreglo;
+    }
+    public function diferenciaDocente($ArrA, $ArrB)
     {
         $fila = 0;
         $Arreglo = array();
         for ($x = 0; $x < count($ArrA); $x++) {
             $Existe = false;
             for ($y = 0; $y < count($ArrB); $y++) {
-                if ($ArrA[$x][0] == $ArrB[$y][0]) {
+                $val = substr($ArrA[$x][0], 0, 7);
+                if ($val == "Docente" and $ArrA[$x][1] == $ArrB[$y][1]) {
                     $Existe = true;
                     break;
                 }
@@ -84,7 +105,7 @@ class Group73
     }
 
     public function transformarDistribuciónADiccionario($Distribucion)
-    {        
+    {
         $Arreglo = array();
         foreach ($Distribucion as $valor) {
             $val = substr($valor[0], 0, 7);
@@ -137,6 +158,8 @@ class Group73
                 $fila++;
             }
         }
+        // echo 'tutoresNuevos->';
+        // print_r($tutoresNuevos);
         return $tutoresNuevos;
     }
 
@@ -167,10 +190,10 @@ class Group73
             }
             if ($Existe == false) {
                 $tutoresQueDejanElSemestre[$fila][0] = $tutoresAnteriorDistribucion[$x][0];
+                $tutoresQueDejanElSemestre[$fila][1] = $tutoresAnteriorDistribucion[$x][0];
                 $fila++;
             }
         }
-        print_r($tutoresQueDejanElSemestre);
         return $tutoresQueDejanElSemestre;
     }
 
@@ -209,19 +232,58 @@ class Group73
             }
         }
         return $alumnosSinTutor;
-    }    
+    }
 
-    public function obtenerAlumnosCachimbos($array, $semestre)
+    public function alumnosCachimbos($alumnosSinTutor, $semestre)
     {
+        $AlumnosCachimbos = array();
         $i = 0;
-        foreach ($array as $key => $valor) {
+        foreach ($alumnosSinTutor as $key => $valor) {
             $val = substr($valor[0], 0, 2);
             if ($val == $semestre) {
-                $Arreglo[$i] = $valor;
+                $AlumnosCachimbos[$i] = $valor;
                 $i += 1;
             }
         }
-        return $Arreglo;
+        return $AlumnosCachimbos;
+    }
+
+    public function alumnosRegulares($alumnosSinTutor, $AlumnosCachimbos)
+    {
+        $alumnosRegulares = array();
+        $i = 0;
+        foreach ($alumnosSinTutor as $key => $valor) {
+            $val = substr($valor[0], 0, 2);
+            if ($val == $semestre) {
+                $AlumnosCachimbos[$i] = $valor;
+                $i += 1;
+            }
+        }
+        return $alumnosRegulares;
+    }
+
+    public function agregarTutorAlDiccionario($DistribucionDiccionario, $tutoresNuevos)
+    {
+        $diccionario = $DistribucionDiccionario;
+        foreach ($tutoresNuevos as $valor) {
+            $diccionario[$valor[0]] = [];
+        }
+        return $diccionario;
+    }
+
+    public function ordenarDiccionarioDistribucion($DistribucionDiccionario, $docenteOrdenadoArray)
+    {
+        $nuevoDiccionario = array();
+        foreach ($docenteOrdenadoArray as $num => $docente) {
+            $val_docente = substr($docente[0], 0, 9);
+            foreach ($DistribucionDiccionario as $key => $alumno) {
+                $val_docente_dicci = substr($key, 0, 9);
+                if ($val_docente == $val_docente_dicci) {
+                    $nuevoDiccionario[$key] = $alumno;
+                }
+            }
+        }
+        return $nuevoDiccionario;
     }
 
     public function cantidadAlumnosTutor($arrayA, $arrayB)
