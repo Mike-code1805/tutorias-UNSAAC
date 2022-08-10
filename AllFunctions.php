@@ -290,6 +290,8 @@ class Group73
     {
         $j = 0;
         $k = 0;
+        $arrayB_ConCargo = array();
+        $arreglo1 = array();
         for ($i = 0; $i < count($arrayB); $i++) {
             if ($arrayB[$i][1] == "PR-DE") {
                 $arrayB_ConCargo[$j][0] = $arrayB[$i][0];
@@ -304,15 +306,18 @@ class Group73
         $a = count($arrayA);
         $b = count($arrayB_SinCargo);
         $c = count($arrayB_ConCargo);
+
         $primeraDistribucion = intdiv($a, ($b + $c));
         $j = 0;
         $k = 0;
         $total = 0;
+        // print_r($primeraDistribucion);
         if (($a % ($b + $c)) != 0) {
             for ($i = 0; $i < $c; $i++) {
                 $arreglo1[$i] = $primeraDistribucion;
                 $total += $primeraDistribucion;
             }
+
             for ($i = 0; $i < $b; $i++) {
                 if ((($a - $total) % $primeraDistribucion) != 0) {
                     $arreglo2[$i] = $primeraDistribucion + 1;
@@ -354,9 +359,50 @@ class Group73
                 $arreglo2[$i] = $primeraDistribucion;
             }
         }
-        shuffle($arreglo1);
-        shuffle($arreglo2);
+        if (count($arreglo1) != 0) {
+            shuffle($arreglo1);
+        }
+        if (count($arreglo2) != 0) {
+            shuffle($arreglo2);
+        }
         $distribucionBalanceada = array_merge($arreglo2, $arreglo1);
         return $distribucionBalanceada;
+    }
+
+    public function distribuirTutoresTutorados($a, $b, $c, $d)
+    {
+        $diccionario = $c;
+        $i = 0;
+        $count = 0;
+        foreach ($c as $doc => $valor) {
+            if ($d[$i] < count($valor)) {
+                echo "Enviar reporte del tutor " . $doc . "-> tiene " . count($valor) - $d[$i] . " alumno(s) de más" . "</br>";
+                $d[$i] = count($valor);
+                $count++;
+            }
+            $i++;
+        }
+        $x = 0;
+        $y = 0;
+        $k = 0;
+        for ($i = 0; $i < count($b); $i++) {
+            foreach ($diccionario as $doc => $listAlum) {
+                if ($y >= count($diccionario)) {
+                    $y = 0;
+                }
+                if ($k >= count($diccionario)) {
+                    $k = 0;
+                }
+                if ($x < count($b)) {
+                    if ($d[$y] != count($listAlum) and $k < count($diccionario)) {
+                        $diccionario[$doc][count($listAlum)] = $b[$x];
+                        $x++;
+                    }
+                    $y++;
+                    $k++;
+                }
+            }
+        }
+        return $diccionario;
     }
 }
