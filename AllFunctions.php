@@ -403,6 +403,31 @@ class Group73
                 }
             }
         }
+        $x = 0;
+        $y = 0;
+        $k = 0;
+        print_r($a);
+        print_r($b);
+        foreach ($diccionario as $doc => $listAlum) {
+            $count = count($listAlum);
+            for ($i = 0; $i < count($a); $i++) {
+                if ($y >= count($diccionario)) {
+                    $y = 0;
+                }
+                if ($k >= count($diccionario)) {
+                    $k = 0;
+                }
+                if ($x < count($a)) {
+                    if ($d[$y] != $count) {
+                        $diccionario[$doc][$count] = $a[$x];
+                        $count++;
+                        $x++;
+                    }                    
+                    $k++;
+                }
+            }
+            $y++;
+        }
         return $diccionario;
     }
 }

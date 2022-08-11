@@ -162,7 +162,7 @@ $arrayAgregaTutorNuevoDiccionario = $Mox->agregarTutorAlDiccionario($arrayDistri
 $arrayDiccionarioOrdenado = $Mox->ordenarDiccionarioDistribucion($arrayAgregaTutorNuevoDiccionario, $arrayDocenteOrdenado);
 $cantidadTutorAlumnos = $Mox->cantidadAlumnosTutor($Arreglo_Matriculados, $arrayDocenteOrdenado);
 $array = $Mox->distribuirTutoresTutorados($arrayAlumnosCachimbosSinTutor, $arrayAlumnosRegularesSinTutor, $arrayDiccionarioOrdenado, $cantidadTutorAlumnos);
-// print_r($arrayDiccionarioOrdenado);
+print_r($array);
 ?>
 </body>
 </html>
