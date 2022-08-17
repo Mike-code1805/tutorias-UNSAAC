@@ -132,19 +132,7 @@ $Mox->Imprimir($AlumnosSinTutor);
                             </thead>
                             <tbody>
                             <?php
-
 $AlumnosSinMatricula = $Mox->diferenciaAlumnos($Arreglo_Dis_Docentes, $Arreglo_Matriculados);
-$Mox->Imprimir($AlumnosSinMatricula);
-// print_r($AlumnosSinMatricula);
-?>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-<?php
 $arrayDistribucionDiccionario = $Mox->transformarDistribuciónADiccionario($Arreglo_Dis_Docentes);
 $arrayDocenteOrdenado = $Mox->ordenarListaDocentes($ArregloDocentes);
 $arrayTutoresQueSeMantienen = $Mox->tutoresQueSeMantienen($arrayDocenteOrdenado, $arrayDistribucionDiccionario);
@@ -162,7 +150,17 @@ $arrayAgregaTutorNuevoDiccionario = $Mox->agregarTutorAlDiccionario($arrayDistri
 $arrayDiccionarioOrdenado = $Mox->ordenarDiccionarioDistribucion($arrayAgregaTutorNuevoDiccionario, $arrayDocenteOrdenado);
 $cantidadTutorAlumnos = $Mox->cantidadAlumnosTutor($Arreglo_Matriculados, $arrayDocenteOrdenado);
 $array = $Mox->distribuirTutoresTutorados($arrayAlumnosCachimbosSinTutor, $arrayAlumnosRegularesSinTutor, $arrayDiccionarioOrdenado, $cantidadTutorAlumnos);
-print_r($array);
+print_r($cantidadTutorAlumnos);
+$Mox->ImprimirDiccionario($array);
+// print_r($AlumnosSinMatricula);
 ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </body>
 </html>

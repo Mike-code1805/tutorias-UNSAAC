@@ -38,6 +38,24 @@ class Group73
             }
         }
     }
+
+    public function ImprimirDiccionario($Array)
+    {
+        if (!empty($Array)) {
+            $PosDocente = 0;
+            
+            foreach ($Array as $docente => $alumnos) {
+                $PosDocente++;
+                $PosAlumno = 0;
+                echo '<tr><th>' . $PosDocente . '</th><th>' . $docente . '</th></tr>';
+                for ($i = 0; $i < count($alumnos); $i++) {
+                    $PosAlumno++;
+                    echo '<tr><th>' . $PosAlumno . '</th><th>' . $alumnos[$i][0] . '</th><th>' . $alumnos[$i][1] . '</th></tr>';
+                }
+            }
+        }
+    }
+
     public function diferenciaAlumnos($ArrA, $ArrB)
     {
         $fila = 0;
@@ -158,8 +176,6 @@ class Group73
                 $fila++;
             }
         }
-        // echo 'tutoresNuevos->';
-        // print_r($tutoresNuevos);
         return $tutoresNuevos;
     }
 
@@ -306,12 +322,10 @@ class Group73
         $a = count($arrayA);
         $b = count($arrayB_SinCargo);
         $c = count($arrayB_ConCargo);
-
         $primeraDistribucion = intdiv($a, ($b + $c));
         $j = 0;
         $k = 0;
         $total = 0;
-        // print_r($primeraDistribucion);
         if (($a % ($b + $c)) != 0) {
             for ($i = 0; $i < $c; $i++) {
                 $arreglo1[$i] = $primeraDistribucion;
@@ -406,8 +420,6 @@ class Group73
         $x = 0;
         $y = 0;
         $k = 0;
-        print_r($a);
-        print_r($b);
         foreach ($diccionario as $doc => $listAlum) {
             $count = count($listAlum);
             for ($i = 0; $i < count($a); $i++) {
@@ -422,7 +434,7 @@ class Group73
                         $diccionario[$doc][$count] = $a[$x];
                         $count++;
                         $x++;
-                    }                    
+                    }
                     $k++;
                 }
             }
