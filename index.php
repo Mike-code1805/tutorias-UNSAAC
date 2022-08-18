@@ -7,6 +7,27 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
     <title>Tutorias UNSAAC</title>
+    <style>
+    .button {
+      border: none;
+      color: white;
+      padding: 10px 32px;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+      cursor: pointer;
+      background-color: #008cba;
+      border-radius: 10px;
+      box-shadow: -5px 5px 5px #98afa9;
+      width: auto;
+    }
+    .button:hover {
+      background-color: #00ba8b;
+    }
+    .button:active {
+      background-color: #252d97;
+    }
+  </style>
 </head>
 <body>
     <div class="container">
@@ -21,7 +42,7 @@
                             <input class="form-control mb-3" name="archivo1" type="file" id="formFile">
                             <label for="formFile" class="form-label">Distribución Distribución Tutor-Tutorado en 2021-1 (.csv)</label>
                             <input class="form-control mb-3" name="archivo2" type="file" id="formFile">
-                            <input type="submit" class="btn btn-primary" value="Cargar">
+                            <input type="submit" class="button" value="Distribuir">
                     </form>
                 </div>
             </div>
@@ -34,7 +55,10 @@
                         <a class="nav-link active" data-bs-toggle="tab" href="#DxD">Matriculados 2022</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" data-bs-toggle="tab" href="#Alumno">Distribución docente</a>
+                        <a class="nav-link" data-bs-toggle="tab" href="#Docentes">Docentes 2022</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-bs-toggle="tab" href="#DA">Distribución Anterior</a>
                     </li>
                 </ul>
                 <div class="tab-content p-3">
@@ -59,18 +83,18 @@ $file1 = $_FILES["archivo1"];
 $file2 = $_FILES["archivo2"];
 $Mox = new Group73();
 $Arreglo_Matriculados = $Mox->csv_Array($file);
-$Mox->Imprimir($Arreglo_Matriculados);
+$Mox->ImprimirArreglo($Arreglo_Matriculados);
 ?>
                             </tbody>
                         </table>
                     </div>
-                    <div class="tab-pane container fade" id="Alumno">
+                    <div class="tab-pane container fade" id="Docentes">
                         <table class="table">
                             <thead>
                             <tr>
                                 <th>Numero</th>
-                                <th>Codigo</th>
                                 <th>Nombre</th>
+                                <th>Categoría</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -85,25 +109,12 @@ $file2 = $_FILES["archivo2"];
 $Mox = new Group73();
 $ArregloDocentes = $Mox->csv_Array($file1);
 $Arreglo_Dis_Docentes = $Mox->csv_Array($file2);
-$Mox->Imprimir($Arreglo_Dis_Docentes);
+$Mox->ImprimirArreglo($ArregloDocentes);
 ?>
                             </tbody>
                         </table>
                     </div>
-                </div>
-            </div>
-            <div class="col-6 text p-3">
-                <h3 class="pb-3">Resultados</h3>
-                <ul class="nav nav-tabs pb-3">
-                    <li class="nav-item">
-                        <a class="nav-link " data-bs-toggle="tab" href="#AST">Alumnos Sin Tutor</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" data-bs-toggle="tab" href="#ASM">Alumnos Sin Matricula</a>
-                    </li>
-                </ul>
-                <div class="tab-content p-3">
-                    <div class="tab-pane container active" id="AST">
+                    <div class="tab-pane container fade" id="DA">
                         <table class="table">
                             <thead>
                             <tr>
@@ -114,14 +125,28 @@ $Mox->Imprimir($Arreglo_Dis_Docentes);
                             </thead>
                             <tbody>
                             <?php
-$AlumnosSinTutor = $Mox->diferenciaAlumnos($Arreglo_Matriculados, $Arreglo_Dis_Docentes);
-$Mox->Imprimir($AlumnosSinTutor);
-
+$Mox->ImprimirArreglo($Arreglo_Dis_Docentes);
 ?>
                             </tbody>
                         </table>
                     </div>
-                    <div class="tab-pane container fade" id="ASM">
+                </div>
+            </div>
+            <div class="col-6 text p-3">
+                <h3 class="pb-3">Resultados</h3>
+                <ul class="nav nav-tabs pb-3">
+                    <li class="nav-item">
+                        <a class="nav-link " data-bs-toggle="tab" href="#ASM">Alumnos Sin Matricula</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-bs-toggle="tab" href="#AST">Alumnos Sin Tutor</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-bs-toggle="tab" href="#DF">Distribución Final</a>
+                    </li>
+                </ul>
+                <div class="tab-content p-3">
+                    <div class="tab-pane container active" id="ASM">
                         <table class="table">
                             <thead>
                             <tr>
@@ -133,6 +158,24 @@ $Mox->Imprimir($AlumnosSinTutor);
                             <tbody>
                             <?php
 $AlumnosSinMatricula = $Mox->diferenciaAlumnos($Arreglo_Dis_Docentes, $Arreglo_Matriculados);
+$Mox->ImprimirArreglo($AlumnosSinMatricula);
+
+?>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="tab-pane container active" id="AST">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th>Numero</th>
+                                <th>Codigo</th>
+                                <th>Nombre</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <?php
+
 $arrayDistribucionDiccionario = $Mox->transformarDistribuciónADiccionario($Arreglo_Dis_Docentes);
 $arrayDocenteOrdenado = $Mox->ordenarListaDocentes($ArregloDocentes);
 $arrayTutoresQueSeMantienen = $Mox->tutoresQueSeMantienen($arrayDocenteOrdenado, $arrayDistribucionDiccionario);
@@ -140,6 +183,22 @@ $arrayTutoresNuevos = $Mox->tutoresNuevos($arrayDocenteOrdenado, $arrayTutoresQu
 $arrayTutoresAnteriorDistribucion = $Mox->tutoresAnteriorDistribucion($arrayDistribucionDiccionario);
 $arrayTutoresQueDejanElSemestre = $Mox->tutoresQueDejanElSemestre($arrayTutoresAnteriorDistribucion, $arrayTutoresQueSeMantienen);
 $arrayAlumnosSinTutor = $Mox->alumnosSinTutor($arrayTutoresQueDejanElSemestre, $arrayDistribucionDiccionario, $Arreglo_Matriculados, $Arreglo_Dis_Docentes);
+$Mox->ImprimirArreglo($arrayAlumnosSinTutor);
+?>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="tab-pane container fade" id="DF">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th>Numero</th>
+                                <th>Codigo</th>
+                                <th>Nombre</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <?php
 $arrayAlumnosCachimbosSinTutor = $Mox->alumnosCachimbos($arrayAlumnosSinTutor, "22");
 $arrayAlumnosRegularesSinTutor = $Mox->diferenciaAlumnos($arrayAlumnosSinTutor, $arrayAlumnosCachimbosSinTutor);
 $arrayQuitantoAlumnosSinTutor = $Mox->diferenciaAlumnos($Arreglo_Dis_Docentes, $arrayAlumnosSinTutor);
@@ -150,7 +209,6 @@ $arrayAgregaTutorNuevoDiccionario = $Mox->agregarTutorAlDiccionario($arrayDistri
 $arrayDiccionarioOrdenado = $Mox->ordenarDiccionarioDistribucion($arrayAgregaTutorNuevoDiccionario, $arrayDocenteOrdenado);
 $cantidadTutorAlumnos = $Mox->cantidadAlumnosTutor($Arreglo_Matriculados, $arrayDocenteOrdenado);
 $array = $Mox->distribuirTutoresTutorados($arrayAlumnosCachimbosSinTutor, $arrayAlumnosRegularesSinTutor, $arrayDiccionarioOrdenado, $cantidadTutorAlumnos);
-print_r($cantidadTutorAlumnos);
 $Mox->ImprimirDiccionario($array);
 // print_r($AlumnosSinMatricula);
 ?>

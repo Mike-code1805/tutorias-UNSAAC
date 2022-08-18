@@ -28,7 +28,7 @@ class Group73
         }
         return $Arreglo;
     }
-    public function Imprimir($Array)
+    public function ImprimirArreglo($Array)
     {
         if (!empty($Array)) {
             $Pos = 0;
@@ -43,11 +43,11 @@ class Group73
     {
         if (!empty($Array)) {
             $PosDocente = 0;
-            
+
             foreach ($Array as $docente => $alumnos) {
                 $PosDocente++;
                 $PosAlumno = 0;
-                echo '<tr><th>' . $PosDocente . '</th><th>' . $docente . '</th></tr>';
+                echo '<tr><th>' . $PosDocente . '</th><th>' . 'Docente' . '</th><th>' . $docente . '</th></tr>';
                 for ($i = 0; $i < count($alumnos); $i++) {
                     $PosAlumno++;
                     echo '<tr><th>' . $PosAlumno . '</th><th>' . $alumnos[$i][0] . '</th><th>' . $alumnos[$i][1] . '</th></tr>';
