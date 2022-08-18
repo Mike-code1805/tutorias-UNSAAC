@@ -210,7 +210,6 @@ $arrayDiccionarioOrdenado = $Mox->ordenarDiccionarioDistribucion($arrayAgregaTut
 $cantidadTutorAlumnos = $Mox->cantidadAlumnosTutor($Arreglo_Matriculados, $arrayDocenteOrdenado);
 $array = $Mox->distribuirTutoresTutorados($arrayAlumnosCachimbosSinTutor, $arrayAlumnosRegularesSinTutor, $arrayDiccionarioOrdenado, $cantidadTutorAlumnos);
 $Mox->ImprimirDiccionario($array);
-// print_r($AlumnosSinMatricula);
 ?>
                             </tbody>
                         </table>
@@ -219,6 +218,5 @@ $Mox->ImprimirDiccionario($array);
             </div>
         </div>
     </div>
-
 </body>
 </html>
